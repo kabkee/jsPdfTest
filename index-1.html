@@ -1,0 +1,48 @@
+
+<div id="getpdf"><i>generating PDF file, please wait...</i></div>
+
+<script language="javascript" src="js/bytescoutpdf1.01.69.js"></script>
+
+<script language="javascript">
+
+    // functon to create PDF object and make PDF document
+    function CreatePDF() {
+        // create BytescoutPDF object instance
+        var pdf = new BytescoutPDF();
+
+        // add new page
+        pdf.pageAdd();
+
+        // draw text
+        pdf.textAdd(20, 20, 'Hello Times Roman!');
+
+        // return BytescoutPDF object instance
+        return pdf;
+    }
+
+    // function to create link to view pdf
+    function CreatePDFDownloadLink(PDFContentBase64){
+        // find "getpdf" DIV element that we use to show the link to view or download PDF
+        var pdfdiv = document.getElementById("getpdf");
+        pdfdiv.innerHTML = '<h3><a title=\"generate and View PDF file as attachment\" href=\"data:application/pdf;base64,' + PDFContentBase64 + '\">Click here to generate and VIEW Sample.PDF right in the browser ...<\/a></h3>';
+
+    }
+
+    // calls CreatePDF() from createpdf.js to generate PDF file and return BytescoutPDF object instance
+    var pdf = CreatePDF();
+
+    // now we set "onload" event for our PDF object into a custom function which will create links to view and download PDF once the generation is done
+    // this is neccessary as PDF generation may take some time especially if you use images (so images should be downloaded and encoded)
+    // so this function below will be called in "onload" event which is fired once PDF file generation has been completed
+    pdf.onload(
+            function() {
+                // get generated PDF file in a form of base64 encoded string
+                var PDFContentBase64 = pdf.getBase64Text();
+                // now we create links to view or download PDF file generated (using method [1] - via "datauri" supported in latest versions of most major browsers)
+                CreatePDFDownloadLink(PDFContentBase64);
+
+            }
+    );
+</script>
+				
+	
